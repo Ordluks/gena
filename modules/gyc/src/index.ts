@@ -1,5 +1,7 @@
+import { structure } from 'folderst-maker'
 import initAppdata from './appdata'
-import interpretTemplate from './template/interpret'
+import addTemplate from './template/add'
+import interpretTemplate from './template/interpreter'
 import loadTemplate from './template/load'
 
 interface GenerateSetting {
@@ -17,13 +19,24 @@ const generateYourComponent = ({template: templateName, name, path}: GenerateSet
 	const tags = { name }
 	const foldersData = interpretTemplate(template, tags)
 
-	
+	structure(foldersData, path)
 }
 
-generateYourComponent({
-	template: 'reactFC',
-	name: 'Component',
-	path: ''
-})
+export = {
+	addTemplate,
+	generateYourComponent
+}
 
-export = generateYourComponent
+// generateYourComponent({
+// 	template: 'newTemplate',
+// 	name: 'New',
+// 	path: 'C:\\Users\\yakov\\Desktop'
+// })
+
+// addTemplate(appdata, 'newTemplate', `
+// module.exports = {
+// 	'##name;Folder ##=rootFolder': {
+// 		'file.txt': '##rootFolder'
+// 	}
+// }
+// `)

@@ -1,11 +1,13 @@
 import { existsSync } from 'fs'
-import { resolve } from 'path'
-import { TemplateFolder } from './interpret'
+import { Appdata, findInAppdata } from '../appdata'
+import { Template } from './interpreter'
 
 
-const loadTemplate = (appdata: string, name: string): void | TemplateFolder => {
-	const path = resolve(appdata, name + '.gyc.js')
-	return existsSync(path) ? require(path) : undefined
+export const TEMPLATE_EXT = '.gyc.js'
+
+const loadTemplate = (appdata: Appdata, name: string): void | Template => {
+	const path = findInAppdata(appdata, name + TEMPLATE_EXT)
+	return path ? require(path) : undefined
 }
 
 export default loadTemplate
