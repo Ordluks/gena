@@ -1,10 +1,13 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'fs'
+import { partial } from 'lodash'
 import { resolve } from 'path'
 import { curry } from 'ramda'
 
 export interface Appdata {
 	path: string
 }
+
+export type AppdataWorker = ReturnType<typeof createAppdataWorker>
 
 const initAppdata = (): Appdata => {
 	const appdataRoot = process.env.APPDATA || (process.platform == 'darwin'
@@ -18,6 +21,13 @@ const initAppdata = (): Appdata => {
 
 	return { path: appdata }
 }
+
+export const createAppdataWorker = (appdata: Appdata) => ({
+	find: findInAppdata(appdata),
+	save: saveToAppdata(appdata),
+	delete: deleteFromAppdata(appdata),
+	filesList: partial(getAppdataFiles, appdata)
+})
 
 export const findInAppdata = curry(
 	(appdata: Appdata, file: string): void | string => {
@@ -34,5 +44,14 @@ export const saveToAppdata = curry(
 		writeFileSync(path, data)
 	}
 )
+
+export const deleteFromAppdata = curry(
+	(appdata: Appdata, file: string) => {
+		const path = resolve(appdata.path, file)
+		unlinkSync(path)
+	}
+)
+
+export const getAppdataFiles = (appdata: Appdata) => readdirSync(appdata.path)
 
 export default initAppdata
