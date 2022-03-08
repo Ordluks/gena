@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "modules\\gyc"
+		},
+		{
+			"path": "modules\\gyc-vscode-extension"
+		}
+	],
+	"settings": {}
+}
