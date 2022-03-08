@@ -1,4 +1,4 @@
-declare module 'GYC' {
+declare module 'gyc' {
 	export interface Template {
 		[key: string]: Template | string
 	}
