@@ -1,16 +1,23 @@
-import { clone, isString, map, reduce, replace, template as lodTemplate, templateSettings as lodTemplateSettings, trim } from 'lodash'
-import { compose } from 'ramda'
+import { file, Folder } from 'folderst-maker'
+import {
+	clone,
+	isString,
+	reduce,
+	replace,
+	template as lodTemplate,
+	templateSettings as lodTemplateSettings,
+	trim
+} from 'lodash'
 
-
-lodTemplateSettings.interpolate = /##([a-zA-Z]*)/
+lodTemplateSettings.interpolate = /##([a-zA-Z]*);?/
 lodTemplateSettings.evaluate = null
 lodTemplateSettings.escape = null
 
 const defineTagRegex = /##=([a-zA-Z]*)$/
 
 
-export interface TemplateFolder {
-	[key: string]: TemplateFolder | string
+export interface Template {
+	[key: string]: Template | string
 }
 
 
@@ -22,7 +29,7 @@ const interpolateTag = (string: string, tags: object) => {
 	}
 }
 
-const interpretTemplate = (source: TemplateFolder, standartTags: object) => {
+const interpretTemplate = (source: Template, standartTags: object): Folder => {
 	const tags = clone(standartTags)
 	return reduce(Object.entries(source), (acc, [name, item]) => {
 
@@ -31,7 +38,7 @@ const interpretTemplate = (source: TemplateFolder, standartTags: object) => {
 		const newItemName = interpolateTag(removedDefinderName, tags)
 		if (tagName) tags[tagName] = newItemName
 
-		const newItem = isString(item) ? interpolateTag(item, tags) : interpretTemplate(item, tags)
+		const newItem = isString(item) ? file(interpolateTag(item, tags)) : interpretTemplate(item, tags)
 
 		return {
 			...acc,
