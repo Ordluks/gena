@@ -1,4 +1,4 @@
-import { curry, T } from 'ramda'
+import { curry } from 'ramda'
 import { structure } from 'folderst-maker'
 import { AppdataWorker } from '../appdata'
 import interpretTemplate, { Template } from './interpreter'
@@ -11,6 +11,7 @@ const TEMPLATE_EXT_REGEXP = fileExtExpr(TEMPLATE_EXT)
 export const createTemplateWorker = (appdataWorker: AppdataWorker) => ({
 	load: loadTemplate(appdataWorker),
 	addNew: addTemplate(appdataWorker),
+	remove: removeTemplate(appdataWorker),
 	list: partial(templatesList, appdataWorker),
 	generateYourComponent: generateYourComponent(appdataWorker)
 })

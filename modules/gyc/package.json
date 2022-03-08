@@ -7,7 +7,7 @@
     "start": "tsc && node dist/index.js",
     "build": "tsc"
   },
-  "bin": "dist/index.js",
+  "types": "types/index.d.ts",
   "keywords": [],
   "author": "",
   "license": "MIT",
